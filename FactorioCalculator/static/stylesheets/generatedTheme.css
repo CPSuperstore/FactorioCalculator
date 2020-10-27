@@ -1,0 +1,87 @@
+
+:root {
+    --color-primary:        #4b1c6c;
+    --color-primary-text:   #ffffff;
+    --color-primary-faded:  #cea9e9;
+    --color-accent-text:    #66b21b;
+}
+
+.active {
+    color: var(--color-primary) !important;
+}
+
+a {
+    color: var(--color-primary);
+}
+
+a:hover {
+    color: var(--color-primary-faded);
+}
+
+.accentText{
+    color: var(--color-accent-text);
+}
+
+a.accentText {
+    text-decoration: underline;
+}
+
+.btn-primary, .list-group-item.active {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary-text) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-faded);
+    border-color: var(--color-primary-faded);
+    color: var(--color-primary-text);
+}
+
+.btn-inverted {
+    background-color: var(--color-primary-text);
+    color: var(--color-primary) !important;
+}
+
+.navbar {
+    background-color: var(--color-primary);
+}
+
+.footer {
+    position: relative;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+    padding-top:    10px;
+    padding-bottom: 10px;
+}
+
+.loading {
+    background-image: url("/static/images/loading.gif");
+    width:  63px;
+    height: 63px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    margin-bottom: -10px;
+}
+.good {
+    color: green;
+}
+
+.bad {
+    color: red;
+}
+
+.container-fluid {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.fa, .fab, .fad, .fal, .far, .fas {
+  width: 20px;
+  height: 20px;
+  vertical-align: text-bottom;
+}

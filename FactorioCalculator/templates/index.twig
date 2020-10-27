@@ -1,0 +1,93 @@
+{% extends "base.twig" %}
+{% set fullscreen=false %}
+{% block title %}Home{% endblock %}
+
+{% block additional_head %}
+<style type="text/css">
+  .card-img-top{
+    height: 150px;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="row align-items-center my-5">
+      <div class="col-lg-7">
+        <img class="img-fluid rounded mb-4 mb-lg-0" src="/static/images/cover-art.jpg" alt="">
+      </div>
+      <div class="col-lg-5">
+        <h1 class="font-weight-light">Factorio Calculator</h1>
+        <p>
+          This website was created to calculate the most efficient factory configuration in Factorio. Specify the rate at which you would like items to be produced, and the item you would like to produce, and let the calculator determine the quantities of each machine in your factory setup!<br>&nbsp;<br>
+          <b>NOTE</b>: Currently we assume you will be using an Assembly Machine 3, Electric Drill, and Electric Furnace. More customization will come soon.
+        </p>
+        <a class="btn btn-primary" href="/calculate"><i class="fas fa-calculator"></i> View the Calculator!</a>
+      </div>
+    </div>
+
+    <div class="card text-white bg-secondary my-5 py-4 text-center">
+      <div class="card-body">
+        <p class="text-white m-0">
+          Want to contribute? Check out the open-source <a href="https://github.com/CPSuperstore/FactorioCalculator">GitHub repository</a><br>
+          Find a bug? Report it <a href="https://github.com/CPSuperstore/FactorioCalculator/issues">Here</a>
+        </p>
+      </div>
+    </div>
+
+<div class="row text-center">
+
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <img class="card-img-top" src="/static/images/hierarchy.png" alt="">
+          <div class="card-body">
+            <h4 class="card-title">Machine Hiearchy</h4>
+            <p class="card-text">View each ingredient required to produce the intended item, and how many machines would be required to keep up with the demand, in an easy to read format.</p>
+          </div>
+          <div class="card-footer">
+            <a href="/calculate" class="btn btn-primary">Find Out More!</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <img class="card-img-top" src="/static/images/production.png" alt="">
+          <div class="card-body">
+            <h4 class="card-title">Machine Breakdown</h4>
+            <p class="card-text">View a detailed breakdown of the machines required for production, and more information on the item which is being produced.</p>
+          </div>
+          <div class="card-footer">
+            <a href="/calculate" class="btn btn-primary">Find Out More!</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <img class="card-img-top" src="/static/images/estimations.png" alt="">
+          <div class="card-body">
+            <h4 class="card-title">Projected Estimations</h4>
+            <p class="card-text">View a breakdown of the projected pollution production and electrical energy consumption of the overall factory.</p>
+          </div>
+          <div class="card-footer">
+            <a href="/calculate" class="btn btn-primary">Find Out More!</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          {# <img class="card-img-top" src="http://placehold.it/500x325" alt=""> #}
+          <div class="card-body">
+            <h4 class="card-title">REST API</h4>
+            <p class="card-text">Integrate your own applications into our calculator with a RESTful API (Documentation Coming Soon)</p>
+          </div>
+{#           <div class="card-footer">
+            <a href="#" class="btn btn-primary">Find Out More!</a>
+          </div> #}
+        </div>
+      </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "base.twig" %}
+{% set fullscreen=false %}
+{% set noFooter=true %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
+		<main role="main" class="container">
+			<div v-if="state == 'LOADING'">
+			<h1 class="mt-5">Processing Your Request...</h1>
+			<p class="lead">Please Wait...</p>
+			<div class="loading"></div>
+			</div>
+			<div v-if="state == ''">
+			<h1 class="mt-5">Your Factory</h1>
+			<p class="lead">Produces ${ rate } ${ itemData.name } per ${ factorLookup[factor] }</p>
+			
+			<h3 class="mt-3">Machine Hierarchy</h3>
+			<div id="jstree-tree" class="well col-sm-3"></div>
+			<pre>${ hierarchyDisplay }</pre>
+
+			<h3 class="mt-5">Production Breakdown</h3>
+			<div class="row">
+				<div class="col-6">
+					<pie-chart :labels="machineLabels" :data="machineData" title="Machines Required"></pie-chart>
+					Total: ${ totalMachines } Machines Required
+				</div>
+				<div class="col-6">
+					<h4>Resulting Item Breakdown</h4>
+					
+					<table class="table table-hover">
+						<tr>
+							<td>Name</td>
+							<td>${ itemData.name }</td>
+						</tr>
+						<tr>
+							<td>Game ID</td>
+							<td>${ itemData.id }</td>
+						</tr>
+						<tr>
+							<td>Type</td>
+							<td>${ itemData.type }</td>
+						</tr>
+						<tr>
+							<td>Wiki</td>
+							<td><a :href="itemData.wiki_link">${ itemData.wiki_link }</a></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<h3 class="mt-5">Estimations</h3>
+			<div class="row mb-5">
+				<div class="col-6">
+					<h4>Pollution Production</h4>			
+					<pie-chart :labels="pollutionLabels" :data="pollutionData" title="Pollution"></pie-chart>
+					Total: ${ totalPollution } Pollution Per Minute
+				</div>
+				<div class="col-6">
+					<h4>Electricity Consumption</h4>
+					<pie-chart :labels="energyLabels" :data="energyData" title="Energy"></pie-chart>
+					Total: ${ totalEnergy } kW (${ totalEnergy / 1000 } MW, ${ totalEnergy / 1000000 } GW)
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock %}
+
+{% block vueJS %}
+<script type="text/javascript">
+	Vue.component('pie-chart', {
+		template : '<canvas :id="id" style="width: 100%; height: 450px"></canvas>',
+		delimiters: ["${","}"],
+		props: ["labels", "data", "title"],
+		data: function() {
+			return {
+				id: (new Date()).getTime()
+			}
+		},
+		methods:{
+		},
+		mounted(){
+			new Chart(document.getElementById(this.id), {
+				type: 'pie',
+				data: {
+					labels: this.labels,
+					datasets: [{
+						label: "Population (millions)",
+						backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+						data: this.data
+					}]
+				},
+				options: {
+					title: {
+						display: true,
+						text: this.title
+					}
+				}
+			});
+		}
+	});
+	var app = new Vue({
+		el: '#app',
+		delimiters: ["${","}"],
+		data: {
+			state: "LOADING",
+			rate: {{ rate }},
+			factor: {{ factor }},
+			item: "{{ item }}",
+			factorLookup: {
+				1: "Second",
+				60: "Minute",
+				3600: "Hour"
+			},
+			hierarchy: {},
+			machineCounts: {},
+			energy: {},
+			pollution: {},
+			totalEnergy: 0,
+			totalPollution: 0,
+			itemData: {},
+			hierarchyDisplay: "",
+			pollutionLabels: [],
+			pollutionData: [],
+			energyLabels: [],
+			energyData: [],
+			machineLabels: [],
+			machineData: [],
+			totalMachines: 0
+		},
+		methods: {
+			calculateFactory(){
+				var parent = this;
+				axios.get('/api/calculate?item=' + this.item + "&rate=" + this.rate + "&conversionFactor=" + this.factor)
+				.then(function (response) {
+					parent.result = response.data;
+
+					parent.hierarchy = response.data.hierarchy;
+					parent.machineCounts = response.data.machineCounts;
+					parent.energy = response.data.energy;
+					parent.pollution = response.data.pollution;
+					parent.totalEnergy = response.data.totalEnergy;
+					parent.totalPollution = response.data.totalPollution;
+					parent.itemData = response.data.item;
+
+					parent.hierarchyDisplay = JSON.stringify(parent.hierarchy, null, "  ");
+
+					parent.hierarchyDisplay = parent.hierarchyDisplay.replaceAll("}", "");
+					parent.hierarchyDisplay = parent.hierarchyDisplay.replaceAll("{", "");
+					parent.hierarchyDisplay = parent.hierarchyDisplay.replaceAll(",", "");
+					parent.hierarchyDisplay = parent.hierarchyDisplay.replaceAll(":", "");
+					parent.hierarchyDisplay = parent.hierarchyDisplay.replaceAll("\"", "");
+
+					parent.hierarchyDisplay = parent.hierarchyDisplay.replaceAll(/[ ]*\n [ ]*count[ ]*/gm, " - ");
+					parent.hierarchyDisplay = parent.hierarchyDisplay.replaceAll(/[ ]*resources[ ]*\n/gm, "");
+					parent.hierarchyDisplay = parent.hierarchyDisplay.replaceAll(/\n[ ]*processor[ ]*/gm, "x ");
+					parent.hierarchyDisplay = parent.hierarchyDisplay.replaceAll(/^\s*[\r\n]/gm, "");
+
+					parent.pollutionLabels = Object.keys(parent.pollution);
+					parent.pollutionData = Object.values(parent.pollution);
+
+					parent.energyLabels = Object.keys(parent.energy);
+					parent.energyData = Object.values(parent.energy);
+
+					parent.machineLabels = Object.keys(parent.machineCounts);
+					parent.machineData = Object.values(parent.machineCounts);
+
+					parent.totalMachines = parent.machineData.reduce(function(a, b) { return a + b; }, 0);
+
+					parent.state = "";
+				})
+				.catch(function (error) {
+					console.log(error);
+				})
+			}
+		},
+		mounted(){
+			this.calculateFactory();
+		}
+	});
+</script>
+{% endblock %}
+{% block belowAll %}
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.twig" %}
+{% set fullscreen=false %}
+{% block title %}Home{% endblock %}
+
+{% block additional_head %}
+<style type="text/css">
+</style>
+{% endblock %}
+
+{% block body %}
+	<main role="main" class="container">
+		<h1 class="mt-5">Factory Calculator</h1>
+		<p class="lead">Please select an item from the following table, and the rate you would like the factory to produce that item at, to view a detailed report of the factory</p>
+		<span class="text-muted mb-2">Click on any name to begin calculation</span>
+		<div class="form-group">
+			<label for="rate">Expected Production Rate</label> 
+			<div class="input-group-append">
+				<input id="rate" name="rate" type="number" class="form-control" aria-describedby="rateHelpBlock" v-model="rate"> 
+				<select class="form-control" style="width: 200px;" v-model="factor">
+					<option value="1">Items/Second</option>
+					<option value="60">Items/Minute</option>
+					<option value="3600">Items/Hour</option>
+				</select>
+			</div> 
+			<span id="rateHelpBlock" class="form-text text-muted">The number of items you expect the factory to produce every second</span>
+		</div> 
+		<table id="example" class="table table-striped table-bordered" style="width:100%">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Category</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for id, recipe in recipies.items() %}
+				<tr>
+					<td><a @click="calculateItem('{{ recipe['id'] }}')" href="javascript:void(0)">{{ recipe['name'] }}</a></td>
+					<td>{{ recipe['category'] }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<div class=" mb-5"></div>
+	</main>
+{% endblock %}
+
+{% block vueJS %}
+    <script type="text/javascript">
+        Vue.component('modal', {
+            template: '#modal-template'
+        })
+        var app = new Vue({
+            el: '#app',
+            delimiters: ["${","}"],
+            data: {
+            	rate: 4,
+            	factor: 60
+            },
+            methods: {
+            	calculateItem(item){
+            		location.href = "/calculate/" + item + "?rate=" + this.rate + "&conversionFactor=" + this.factor;
+            	}
+            },
+            mounted(){
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block belowAll %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+				$('#example').DataTable();
+		} );
+	</script>
+{% endblock %}

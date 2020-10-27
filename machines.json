@@ -1,0 +1,60 @@
+{
+	"furnace": {
+		"stone": {
+			"speed": 1,
+            "energy": 0,
+            "pollution": 2
+		},
+		"steel": {
+            "speed": 2,
+            "energy": 0,
+            "pollution": 4
+        },
+		"electric": {
+            "speed": 2,
+            "energy": 180,
+            "pollution": 1
+        }
+	},
+    "assembly-machine": {
+        "1": {
+            "speed": 0.5,
+            "energy": 75,
+            "pollution": 4
+        },
+        "2": {
+            "speed": 0.75,
+            "energy": 150,
+            "pollution": 3
+        },
+        "3": {
+            "speed": 1.25,
+            "energy": 375,
+            "pollution": 2
+        }
+    },
+    "drill": {
+        "burner": {
+            "speed": 0.25,
+            "energy": 0,
+            "pollution": 12
+        },
+        "electric": {
+            "speed": 0.5,
+            "energy": 90,
+            "pollution": 10
+        }
+    },
+    "pump": {
+        "pumpjack": {
+            "speed": 1,
+            "energy": 90,
+            "pollution": 10
+        },
+        "offshore": {
+            "speed": 1200,
+            "energy": 0,
+            "pollution": 0
+        }
+    }
+}
