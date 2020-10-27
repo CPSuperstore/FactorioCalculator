@@ -1,9 +1,9 @@
 
 :root {
-    --color-primary:        #023023;
+    --color-primary:        #913C00;
     --color-primary-text:   #ffffff;
-    --color-primary-faded:  #06ae0c;
-    --color-accent-text:    #9b6dff;
+    --color-primary-faded:  #9e7f64;
+    --color-accent-text:    #271406;
 }
 
 .active {
