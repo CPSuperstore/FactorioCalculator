@@ -1,9 +1,9 @@
 
 :root {
-    --color-primary:        #4b1c6c;
+    --color-primary:        #023023;
     --color-primary-text:   #ffffff;
-    --color-primary-faded:  #cea9e9;
-    --color-accent-text:    #66b21b;
+    --color-primary-faded:  #06ae0c;
+    --color-accent-text:    #9b6dff;
 }
 
 .active {
@@ -19,7 +19,7 @@ a:hover {
 }
 
 .accentText{
-    color: var(--color-accent-text);
+    color: var(--color-primary-text);
 }
 
 a.accentText {

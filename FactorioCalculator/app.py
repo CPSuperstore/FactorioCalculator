@@ -45,3 +45,8 @@ def calculate_item(item):
 @app.route("/feedback")
 def feedback():
     return render_template("feedback.twig")
+
+
+@app.route("/api")
+def api_docs():
+    return render_template("api.twig", host=request.host_url)

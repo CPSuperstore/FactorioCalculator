@@ -1,0 +1,120 @@
+{% extends "base.twig" %}
+{% set fullscreen=false %}
+{% block title %}Home{% endblock %}
+
+{% block additional_head %}
+<style type="text/css">
+  .card-img-top{
+    height: 150px;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5">Factorio Calculator API</h1>
+
+    <h5><code>{{ host }}api/calculate?item=__&rate=__&conversionFactor=__</code></h5>
+    <b>GET</b>: Calculates the machines required in the factory factory
+    <table class="table">
+        <tr>
+            <td><code>item</code></td>
+            <td>The game ID of the item to produce. (For a list, please see the <a href="https://wiki.factorio.com/">Factorio Wiki</a> - Use the Internal name of the item)</td>
+        </tr>
+        <tr>
+            <td><code>rate</code></td>
+            <td>
+                The rate you would like the item to be produced at per second. (ex. 4 means 4 items will be produced per second)<br>
+                This value is divided by the <code>conversionFactor</code> to allow support different time intervals. (Default: 4)
+            </td>
+        </tr>
+        <tr>
+            <td><code>conversionFactor</code></td>
+            <td>
+                The value to divided the rate by. For example, if this value is 60, the system will calculate <code>rate</code> items per minute.<br>
+                1=second, 3600=hour. You may use any other values you see fit. (Default: 60 - per minute)
+            </td>
+        </tr>
+    </table>
+    <h5>Result Example - Creating 4 Electronic Circuits per Minute</h5>
+    <code>{{ host }}api/calculate?electronic-circuit?rate=4&conversionFactor=60</code>
+    <pre class="mb-5"><code>
+{
+    "energy": {
+        "assembly-machine": 750,
+        "drill": 180,
+        "furnace": 360
+    },
+    "hierarchy": {
+        "electronic-circuit": {
+            "count": 0.03,
+            "processor": "assembly-machine",
+            "resources": {
+                "copper-cable": {
+                    "count": 0.04,
+                    "processor": "assembly-machine",
+                    "resources": {
+                        "copper-plate": {
+                            "count": 0.35,
+                            "processor": "furnace",
+                            "resources": {
+                                "copper-ore": {
+                                    "count": 0.4,
+                                    "processor": "drill",
+                                    "resources": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "iron-plate": {
+                    "count": 0.12,
+                    "processor": "furnace",
+                    "resources": {
+                        "iron-ore": {
+                            "count": 0.13,
+                            "processor": "drill",
+                            "resources": {}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "item": {
+        "category": "Intermediate product",
+        "id": "electronic-circuit",
+        "name": "Electronic circuit",
+        "recipe": {
+            "ingredients": [
+                {
+                    "amount": 3,
+                    "id": "copper-cable"
+                },
+                {
+                    "amount": 1,
+                    "id": "iron-plate"
+                }
+            ],
+            "time": 0.5,
+            "yield": 1
+        },
+        "type": "Intermediate product",
+        "wiki_link": "https://wiki.factorio.com/Electronic_circuit"
+    },
+    "machineCounts": {
+        "assembly-machine": 2,
+        "drill": 2,
+        "furnace": 2
+    },
+    "pollution": {
+        "assembly-machine": 4,
+        "drill": 20,
+        "furnace": 2
+    },
+    "rate": 0.06666666666666667,
+    "totalEnergy": 1290,
+    "totalPollution": 26
+}
+    </code></pre>
+
+{% endblock %}

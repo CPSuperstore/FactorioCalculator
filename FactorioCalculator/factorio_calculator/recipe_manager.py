@@ -1,6 +1,6 @@
 import json
+import os
 
-JSON_URL = "https://kevinta893.github.io/factorio-recipes-json/recipes.dictionary.json"
 JSON_FILE = "recipes.json"
 MACHINES_FILE = "machines.json"
 
@@ -15,15 +15,13 @@ PUMPED_ITEMS = [
 ]
 
 
-def get_recipes():
-    with open(JSON_FILE) as f:
+def read_json_file(filename):
+    if not os.path.isfile(filename):
+        filename = os.path.join("FactorioCalculator", filename)
+
+    with open(filename) as f:
         return json.loads(f.read())
 
 
-def get_machines():
-    with open(MACHINES_FILE) as f:
-        return json.loads(f.read())
-
-
-RECIPE_DATA = get_recipes()
-MACHINE_DATA = get_machines()
+RECIPE_DATA = read_json_file(JSON_FILE)
+MACHINE_DATA = read_json_file(MACHINES_FILE)
